@@ -20,7 +20,7 @@ public class SolrCloudTest {
     private static final Logger logger = LoggerFactory.getLogger(SolrCloudTest.class);
     private CloudSolrClient cloudSolrClient;
     private String defaultCollection;
-    private String zkHost = "cdh01:2181";
+    private String zkHost = "centos1:2181";
     public SolrCloudTest(String collection){
         this.defaultCollection = collection;
         initClient();
