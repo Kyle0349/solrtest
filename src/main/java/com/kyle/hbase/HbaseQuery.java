@@ -2,6 +2,8 @@ package com.kyle.hbase;
 
 import com.alibaba.fastjson.JSON;
 import com.kyle.solr.SolrCloudTest;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
@@ -16,8 +18,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class HbaseQuery {
-
-    private HbaseConnection connection = new HbaseConnection();
+    //加载配置文件属性
+    static Config config = ConfigFactory.load("userdev_pi_solr.properties");
+    private HbaseConnection connection = new HbaseConnection(config.getString("hbase_zookeeper_quorum"));
 
     public String getDataFromHbase(String tableName, String solr_collection, String searchStr) throws IOException, SolrServerException {
         SolrCloudTest solrCloudTest = new SolrCloudTest(solr_collection);

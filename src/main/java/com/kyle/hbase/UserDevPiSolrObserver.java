@@ -14,8 +14,6 @@ import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.wal.WALEdit;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +23,6 @@ public class UserDevPiSolrObserver extends BaseRegionObserver {
     //加载配置文件属性
     static Config config = ConfigFactory.load("userdev_pi_solr.properties");
     //log记录
-    private static final Logger logger = LoggerFactory.getLogger(UserDevPiSolrObserver.class);
 
     @Override
     public void postPut(ObserverContext<RegionCoprocessorEnvironment> e,
@@ -38,13 +35,12 @@ public class UserDevPiSolrObserver extends BaseRegionObserver {
         doc.addField("rowkey",rowkey);
         //获取需要索引的列
         String[] hbase_columns = config.getString("hbase_column").split(",");
-
+        String hbase_column_family = config.getString("hbase_column_family");
         //获取需要索引的列的值并将其添加到SolrDoc
-        for (int i = 0; i < hbase_columns.length; i++){
-            String colName = hbase_columns[i];
+        for (String colName : hbase_columns) {
             String colValue = "";
             //获取指定列
-            List<Cell> cells = put.get("cf".getBytes(), colName.getBytes());
+            List<Cell> cells = put.get(hbase_column_family.getBytes(), colName.getBytes());
             if (null != cells){
                 try{
                     colValue = Bytes.toString(CellUtil.cloneValue(cells.get(0)));

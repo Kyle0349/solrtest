@@ -11,16 +11,18 @@ public class HbaseConnection {
 
     private Connection connection;
     private Configuration conf;
+    private String hbase_zookeeper_quorum;
 
 
-    public HbaseConnection(){
+    public HbaseConnection(String hbase_zookeeper_quorum){
+        this.hbase_zookeeper_quorum = hbase_zookeeper_quorum;
         getConnection();
     }
 
 
     private Configuration getConf(){
         conf = HBaseConfiguration.create();
-        conf.set("hbase.zookeeper.quorum","cdh01:2181");
+        conf.set("hbase.zookeeper.quorum",hbase_zookeeper_quorum);
         return conf;
     }
 
